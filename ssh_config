@@ -1,0 +1,32 @@
+# opnsense router
+Host faucet
+	User root
+	HostName 10.188.33.84 # TODO: change this to actual IP when on-site
+	Compression yes
+	PasswordAuthentication no
+	PreferredAuthentications publickey
+	IdentitiesOnly yes
+	IdentityFile ~/.ssh/id_faucet
+	ProxyJump cs3-login # TODO: change to you cs3-login host alias
+
+# visualization tower
+Host viz
+	User faucet
+	Compression yes
+	PasswordAuthentication no
+	PreferredAuthentications publickey
+	IdentitiesOnly yes
+	IdentityFile ~/.ssh/id_faucet
+	ProxyJump faucet
+	ForwardX11 yes
+	ForwardX11Trusted yes
+
+# copute nodes
+Host drain hot cold
+	User root # TODO: change to own user
+	Compression yes
+	PasswordAuthentication no
+	PreferredAuthentications publickey
+	IdentitiesOnly yes
+	IdentityFile ~/.ssh/id_faucet
+	ProxyJump faucet
