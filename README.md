@@ -22,7 +22,7 @@ Detailed description:
 | Host     | IP-Address | DNS-Alias | Description                |
 |----------|------------|-----------|----------------------------|
 | WAN      |            |           | Upstream network           |
-| OPNsense | DHCP (WAN)<br>10.1.1.1 (LAN) | opnsense<br>router<br>gateway<br>dns | Router, DHCP-server, DNS-server, Gateway, running OPNsense |
+| OPNsense | DHCP (WAN)<br>10.1.1.1/24 (LAN) | opnsense<br>router<br>gateway<br>dns | Router, DHCP-server, DNS-server, Gateway, running OPNsense |
 | switch   | 10.1.1.2   |           | Managed L3-switch          |
 | viz      | 10.1.1.3   | viz       | Tower-PC for X-Forwarding* |
 | drain    | 10.1.1.11  | drain     | HEAD-node, CPU-only        |
