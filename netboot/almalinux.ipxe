@@ -1,0 +1,4 @@
+# FAUcet kickstart
+set ks_url http://192.1.1.3/ks.cfg
+set params inst.ks=${ks_url}
+# ...

@@ -53,13 +53,29 @@ MAC-Addresses:
 
 # Users
 
-User: `root` or `faucet`  
+User: `root`, `faucet` (for viz), or your first name (lowercase)  
 Password: (ask)  
 Key: `id_faucet` (ask)
 
 # QoL
 
 - Nodes are off by default to save power, use `./poweron.sh` to power them on (also available from OPNsense)
-- After working, please consider powering down the nodes, provided nobody else is accessing them at the moment (helper script `./poweroff.sh`)
-- A `~/.ssh/config` alongside a universal keyfile (`id_faucet`) is provided for easy access to the cluster
-- To install packages on viz (Arch), use `yay <package>` - thanks to the AUR, almost every application is packaged and easily installable
+- After a work session, please consider powering down the nodes, provided nobody else is accessing them at the moment (helper script `./poweroff.sh`)
+- A `~/.ssh/config` alongside a universal keyfile (`id_faucet`) is provided for easy access to the cluster. It should never be necessary to input a password manually
+- To install packages on viz (Arch), use `yay <package>` - thanks to the [AUR](https://aur.archlinux.org/), almost every application is packaged and easily installable
+
+# Netboot
+
+Installing without USB sticks is made possible by [netboot.xyz](https://netboot.xyz/).
+
+To reinstall a bare-bones Alma:
+
+1. Press F12 during boot to force iPXE
+2. Select `Alma 9` under `Linux Network Installs` with the `text based installer`
+3. Kickstart URL should already be set to `http://192.1.1.3/ks.cfg`, enabling automatic installation
+
+# On-Site
+
+At the competition, there are a few things to consider:
+
+- update the `TODO` parts from the `~/.ssh/config`, as the surrounding network environment has changed

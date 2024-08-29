@@ -2,31 +2,37 @@
 Host faucet
 	User root
 	HostName 10.188.33.84 # TODO: change this to actual IP when on-site
+	StrictHostKeyChecking no
+	UserKnownHostsFile /dev/null
 	Compression yes
 	PasswordAuthentication no
 	PreferredAuthentications publickey
 	IdentitiesOnly yes
 	IdentityFile ~/.ssh/id_faucet
-	ProxyJump cs3-login # TODO: change to you cs3-login host alias
+	ProxyJump cs3-login # TODO: change to your cs3-login host alias, or remove when onsite
 
 # visualization tower
 Host viz
 	User faucet
+	StrictHostKeyChecking no
+	UserKnownHostsFile /dev/null
 	Compression yes
 	PasswordAuthentication no
 	PreferredAuthentications publickey
 	IdentitiesOnly yes
 	IdentityFile ~/.ssh/id_faucet
-	ProxyJump faucet
+	ProxyJump faucet # TODO: not needed when in internal network
 	ForwardX11 yes
 	ForwardX11Trusted yes
 
 # copute nodes
 Host drain hot cold
 	User root # TODO: change to own user
+	StrictHostKeyChecking no
+	UserKnownHostsFile /dev/null
 	Compression yes
 	PasswordAuthentication no
 	PreferredAuthentications publickey
 	IdentitiesOnly yes
 	IdentityFile ~/.ssh/id_faucet
-	ProxyJump faucet
+	ProxyJump faucet # TODO: not needed when in internal network

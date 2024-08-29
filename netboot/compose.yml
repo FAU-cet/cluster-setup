@@ -1,0 +1,12 @@
+services:
+  netbootxyz:
+    image: ghcr.io/netbootxyz/netbootxyz
+    container_name: netbootxyz
+    volumes:
+      - ./netboot/config:/config # prepend almalinux.ipxe contents in here
+      - ./netboot/assets:/assets # place ks.cfg here
+    ports:
+      - 3000:3000 # management webinterface
+      - 69:69/udp # PXE
+      - 80:80 # asset server for kickstart
+    restart: unless-stopped
