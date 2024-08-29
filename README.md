@@ -3,7 +3,7 @@
 ```
            (DHCP)
      WAN --------- OPNsense
-                (192.1.1.1/24)
+                 (10.1.1.1/24)
                        |
                        |
          viz ------- switch ----- others
@@ -19,19 +19,19 @@
 
 Detailed description:
 
-| Host     | IP-Address  | DNS-Alias | Description                |
-|----------|-------------|-----------|----------------------------|
-| WAN      |             |           | Upstream network           |
-| OPNsense | DHCP (WAN)<br>192.1.1.1 (LAN) | opnsense<br>router<br>gateway<br>dns | Router, DHCP-server, DNS-server, Gateway, running OPNsense |
-| switch   | 192.1.1.2   |           | Managed L3-switch          |
-| viz      | 192.1.1.3   | viz       | Tower-PC for X-Forwarding* |
-| drain    | 192.1.1.11  | drain     | HEAD-node, CPU-only        |
-| mdrain   | 192.1.1.111 | mdrain    | Management for drain       |
-| hot      | 192.1.1.22  | hot       | Compute-node, 4x H100      |
-| mhot     | 192.1.1.122 | mhot      | Management for hot         |
-| cold     | 192.1.1.33  | cold      | Compute-node, 4x H100      |
-| mcold    | 192.1.1.133 | mcold     | Management for cold        |
-| others   | DHCP        |           | Other devices connected to switch, will receive 192.1.1.2-254/24 as DHCP-leases |
+| Host     | IP-Address | DNS-Alias | Description                |
+|----------|------------|-----------|----------------------------|
+| WAN      |            |           | Upstream network           |
+| OPNsense | DHCP (WAN)<br>10.1.1.1 (LAN) | opnsense<br>router<br>gateway<br>dns | Router, DHCP-server, DNS-server, Gateway, running OPNsense |
+| switch   | 10.1.1.2   |           | Managed L3-switch          |
+| viz      | 10.1.1.3   | viz       | Tower-PC for X-Forwarding* |
+| drain    | 10.1.1.11  | drain     | HEAD-node, CPU-only        |
+| mdrain   | 10.1.1.111 | mdrain    | Management for drain       |
+| hot      | 10.1.1.22  | hot       | Compute-node, 4x H100      |
+| mhot     | 10.1.1.122 | mhot      | Management for hot         |
+| cold     | 10.1.1.33  | cold      | Compute-node, 4x H100      |
+| mcold    | 10.1.1.133 | mcold     | Management for cold        |
+| others   | DHCP       |           | Other devices connected to switch, will receive 10.1.1.2-254/24 as DHCP-leases |
 
 MAC-Addresses:
 
@@ -72,7 +72,7 @@ To reinstall a bare-bones Alma:
 
 1. Press F12 during boot to force iPXE
 2. Select `Alma 9` under `Linux Network Installs` with the `text based installer`
-3. Kickstart URL should already be set to `http://192.1.1.3/ks.cfg`, enabling automatic installation
+3. Kickstart URL should already be set to `http://10.1.1.3/ks.cfg`, enabling automatic installation
 
 # On-Site
 
