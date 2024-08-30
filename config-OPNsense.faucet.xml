@@ -280,6 +280,8 @@
     <dns8gw>none</dns8gw>
     <serialspeed>115200</serialspeed>
     <primaryconsole>video</primaryconsole>
+    <secondaryconsole/>
+    <serialusb/>
   </system>
   <interfaces>
     <wan>
@@ -480,9 +482,9 @@
     <column_count>2</column_count>
   </widgets>
   <revision>
-    <username>root@10.1.1.3</username>
-    <time>1724936193.2152</time>
-    <description>/services_dhcp.php made changes</description>
+    <username>root@10.1.1.4</username>
+    <time>1725025004.235</time>
+    <description>/services_dnsmasq_edit.php made changes</description>
   </revision>
   <OPNsense>
     <DHCRelay version="1.0.1"/>
@@ -1014,7 +1016,11 @@
       <ip>10.1.1.11</ip>
       <descr/>
       <aliases>
-        <item/>
+        <item>
+          <description/>
+          <domain>head</domain>
+          <host>head</host>
+        </item>
       </aliases>
     </hosts>
     <hosts>
