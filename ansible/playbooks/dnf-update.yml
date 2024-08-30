@@ -1,0 +1,13 @@
+- name: Update all dnf software
+  hosts: nodes
+  become: true
+  tasks:
+    - name: Perform dnf upgrade
+      ansible.builtin.dnf:
+        name: "*"
+        state: latest
+        update_cache: true
+
+    - name: Remove leaf packages
+      ansible.builtin.dnf:
+        autoremove: true

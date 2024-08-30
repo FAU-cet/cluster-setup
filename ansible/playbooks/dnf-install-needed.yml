@@ -1,0 +1,27 @@
+- name: Install all required dnf packages
+  hosts: nodes
+  become: true
+
+  tasks:
+    - name: Enable crb
+      community.general.dnf_config_manager:
+        name: crb
+        state: enabled
+
+    - name: Enable epel
+      ansible.builtin.dnf:
+        name: epel-release
+        state: present
+
+    - name: Install dnf software
+      ansible.builtin.dnf:
+        name:
+          - gcc
+          - g++
+          - make
+          - cmake
+          - git
+          - htop
+          - btop
+          - m4
+        state: present

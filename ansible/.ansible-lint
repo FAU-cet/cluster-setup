@@ -1,0 +1,3 @@
+skip_list:
+  - '301' # commands that also run when nothing is changed
+  - '403' # installing 'latest'

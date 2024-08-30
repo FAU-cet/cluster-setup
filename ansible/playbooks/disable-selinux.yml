@@ -1,0 +1,13 @@
+- name: Ensure SELinux is set to permissive mode
+  hosts: nodes
+  become: true
+  tasks:
+    - name: Set SELinux to permissive mode temporarily
+      ansible.builtin.command: setenforce 0
+      failed_when: false
+
+    - name: Ensure SELinux is set to permissive mode permanently
+      ansible.builtin.lineinfile:
+        path: /etc/selinux/config
+        regexp: '^SELINUX='
+        line: 'SELINUX=permissive'

@@ -1,0 +1,105 @@
+- name: Setup /home with NFS on head and compute nodes
+  hosts: head
+  become: true
+  tasks:
+
+    - name: Install necessary packages
+      ansible.builtin.package:
+        name:
+          - xfsprogs
+          - nfs-utils
+        state: present
+
+    - name: Format the disk with XFS filesystem
+      community.general.filesystem:
+        fstype: xfs
+        dev: /dev/disk/by-path/pci-0000:62:00.0-nvme-1
+
+    - name: Create mount point /home if it does not exist
+      ansible.builtin.file:
+        path: /home
+        state: directory
+        mode: '0755'
+
+    - name: Mount the disk to /home
+      ansible.posix.mount:
+        path: /home
+        src: /dev/disk/by-path/pci-0000:62:00.0-nvme-1
+        fstype: xfs
+        state: mounted
+
+    - name: Add mount entry to fstab
+      ansible.posix.mount:
+        path: /home
+        src: /dev/disk/by-path/pci-0000:62:00.0-nvme-1
+        fstype: xfs
+        opts: defaults
+        state: present
+
+    - name: Configure NFS export for /home
+      ansible.builtin.lineinfile:
+        path: /etc/exports
+        line: "/home  *(rw,sync,no_root_squash)"
+        create: true
+        mode: '0777'
+
+    - name: Export NFS share
+      ansible.builtin.command: exportfs -a
+
+    - name: Ensure NFS server is running and enabled
+      ansible.builtin.service:
+        name: nfs-server
+        state: started
+        enabled: true
+
+    - name: Allow NFS services through the firewall
+      ansible.posix.firewalld:
+        service: "{{ item }}"
+        permanent: true
+        state: enabled
+        immediate: true
+      loop:
+        - nfs
+        - rpc-bind
+        - mountd
+
+    - name: Reload firewalld to apply changes
+      ansible.builtin.command: firewall-cmd --reload
+
+- name: Mount /home from head on compute nodes
+  hosts: compute
+  become: true
+  tasks:
+
+    - name: Install NFS client package
+      ansible.builtin.package:
+        name: nfs-utils
+        state: present
+
+    - name: Set SELinux boolean for NFS home directories
+      ansible.posix.seboolean:
+        name: use_nfs_home_dirs
+        state: true
+        persistent: true
+
+    - name: Create mount point /home if it does not exist
+      ansible.builtin.file:
+        path: /home
+        state: directory
+        mode: '0755'
+
+    - name: Mount NFS share from head to /home
+      ansible.posix.mount:
+        path: /home
+        src: "head:/home"
+        fstype: nfs
+        opts: defaults
+        state: mounted
+
+    - name: Add NFS mount entry to fstab
+      ansible.posix.mount:
+        path: /home
+        src: "head:/home"
+        fstype: nfs
+        opts: defaults
+        state: present

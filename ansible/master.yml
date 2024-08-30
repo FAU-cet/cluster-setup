@@ -1,0 +1,9 @@
+- ansible.builtin.import_playbook: playbooks/ping.yml
+- ansible.builtin.import_playbook: playbooks/dnf-update.yml
+- ansible.builtin.import_playbook: playbooks/dnf-install-needed.yml
+- ansible.builtin.import_playbook: playbooks/disable-selinux.yml
+- ansible.builtin.import_playbook: playbooks/nfs-home.yml
+- ansible.builtin.import_playbook: playbooks/setup-users.yml
+- ansible.builtin.import_playbook: playbooks/nvidia-driver.yml
+
+- ansible.builtin.import_playbook: playbooks/reboot.yml

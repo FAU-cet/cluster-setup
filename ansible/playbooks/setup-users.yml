@@ -1,0 +1,61 @@
+- name: Manage users across nodes
+  hosts: nodes
+  become: true
+  vars:
+    users:
+      - adrian
+      - jay
+      - johannes
+      - melanie
+      - nils
+      - onur
+      - tobias
+
+  tasks:
+    - name: Ensure the wheel group exists
+      ansible.builtin.group:
+        name: wheel
+        state: present
+
+    - name: Ensure users exist on head and compute nodes
+      ansible.builtin.user:
+        name: "{{ item }}"
+        state: present
+        home: "/home/{{ item }}"
+        password: "$6$PCiXDz.zRD1mUnSC$U7alSAYJK.vGl/e46T4DFYNy/kfRJ9IfxV3dbhetjKkTU25Ax3fGRoiSMQaJ9Ht8jxVvt0OQDO4IVAFFlpaYd0"
+      loop: "{{ users }}"
+
+    - name: Ensure home directory exists on head node
+      when: inventory_hostname in groups['head']
+      ansible.builtin.file:
+        path: "/home/{{ item }}"
+        state: directory
+        owner: "{{ item }}"
+        group: "{{ item }}"
+        mode: '0755'
+      loop: "{{ users }}"
+
+    - name: Copy template home directory to new home directories on head node
+      when: inventory_hostname in groups['head']
+      ansible.posix.synchronize:
+        mode: push
+        src: "./templates/home/"
+        dest: "/home/{{ item }}/"
+        recursive: true
+        rsync_opts:
+          - "--chown={{ item }}:{{ item }}"
+      loop: "{{ users }}"
+
+    - name: Add users to wheel group
+      ansible.builtin.user:
+        name: "{{ item }}"
+        groups: wheel
+        append: true
+      loop: "{{ users }}"
+
+    - name: Ensure sudoers file is configured for passwordless sudo
+      ansible.builtin.lineinfile:
+        path: /etc/sudoers
+        state: present
+        validate: 'visudo -cf %s'
+        line: '%wheel ALL=(ALL) NOPASSWD: ALL'

@@ -1,0 +1,7 @@
+- name: Reboot system
+  hosts: nodes
+  become: true
+  tasks:
+    - name: Reboot
+      ansible.builtin.reboot:
+        reboot_timeout: 600
