@@ -3,6 +3,7 @@
   become: true
   vars:
     users:
+      - faucet
       - adrian
       - jay
       - johannes

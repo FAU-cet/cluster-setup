@@ -18,7 +18,7 @@
       when: inventory_hostname in groups['head']
       ansible.posix.synchronize:
         mode: push
-        src: "./templates/modfiles/"
+        src: "./templates/lmod/modfiles/"
         dest: "/work/modfiles/"
         recursive: true
         rsync_opts:

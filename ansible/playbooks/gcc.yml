@@ -1,0 +1,86 @@
+- name: Install gcc in different versions
+  hosts: all
+  vars:
+    versions:
+      - 14.2.0
+      - 13.3.0
+      - 12.4.0
+      - 11.5.0
+      - 10.5.0
+
+  tasks:
+    - name: Check if gcc is already installed
+      ansible.builtin.stat:
+        path: "/opt/gcc"
+      register: gcc
+
+    - name: Create folder
+      ansible.builtin.file:
+        path: "/opt/gcc"
+        state: directory
+        mode: '0755'
+
+    - name: Create module folder
+      when: inventory_hostname in groups['head']
+      ansible.builtin.file:
+        path: "/work/modfiles/gcc"
+        state: directory
+        mode: '0755'
+
+    - name: Download
+      ansible.builtin.get_url:
+        url: "https://ftp.fau.de/gnu/gcc/gcc-{{ item }}/gcc-{{ item }}.tar.gz"
+        dest: "/tmp/gcc-{{ item }}.tar.gz"
+        mode: "0755"
+      when: not gcc.stat.exists
+      loop: "{{ versions }}"
+
+    - name: Extract
+      ansible.builtin.unarchive:
+        src: "/tmp/gcc-{{ item }}.tar.gz"
+        remote_src: true
+        dest: "/tmp/"
+        mode: "0755"
+      when: not gcc.stat.exists
+      loop: "{{ versions }}"
+
+    - name: Configure
+      ansible.builtin.command:
+        cmd: "./configure --prefix /opt/gcc/{{ item }} --disable-multilib"
+        chdir: /tmp/gcc-{{ item }}
+      when: not gcc.stat.exists
+      loop: "{{ versions }}"
+
+    - name: Build
+      ansible.builtin.command:
+        cmd: make -j 100
+        chdir: /tmp/gcc-{{ item }}
+      when: not gcc.stat.exists
+      loop: "{{ versions }}"
+
+    - name: Install
+      ansible.builtin.command:
+        cmd: make install-strip
+        chdir: /tmp/gcc-{{ item }}
+      when: not gcc.stat.exists
+      loop: "{{ versions }}"
+
+    - name: Clean up archive
+      ansible.builtin.file:
+        path: "/tmp/gcc-{{ item }}.tar.gz"
+        state: absent
+      loop: "{{ versions }}"
+
+    - name: Clean up src
+      ansible.builtin.file:
+        path: "/tmp/gcc-{{ item }}"
+        state: absent
+      loop: "{{ versions }}"
+
+    - name: Modulefiles
+      when: inventory_hostname in groups['head']
+      ansible.builtin.template:
+        src: "./templates/lmod/gcc-template.j2"
+        dest: "/work/modfiles/gcc/{{ item }}"
+        mode: "0755"
+      loop: "{{ versions }}"

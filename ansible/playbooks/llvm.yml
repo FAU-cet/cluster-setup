@@ -1,0 +1,78 @@
+- name: Install llvm/clang in different versions
+  hosts: all
+  vars:
+    versions:
+      - 18.1.8
+      - 17.0.6
+      - 16.0.6
+      - 15.0.7
+
+  tasks:
+    - name: Check if llvm is already installed
+      ansible.builtin.stat:
+        path: "/opt/llvm"
+      register: llvm
+
+    - name: Create folder
+      ansible.builtin.file:
+        path: "/opt/llvm"
+        state: directory
+        mode: '0755'
+
+    - name: Create module folder
+      when: inventory_hostname in groups['head']
+      ansible.builtin.file:
+        path: "/work/modfiles/llvm"
+        state: directory
+        mode: '0755'
+
+    - name: Download llvm
+      ansible.builtin.get_url:
+        url: https://github.com/llvm/llvm-project/archive/refs/tags/llvmorg-{{ item }}.tar.gz
+        dest: "/tmp/llvmorg-{{ item }}.tar.gz"
+        mode: "0755"
+      when: not llvm.stat.exists
+      loop: "{{ versions }}"
+
+    - name: Extract llvm
+      ansible.builtin.unarchive:
+        src: "/tmp/llvmorg-{{ item }}.tar.gz"
+        remote_src: true
+        dest: "/tmp/"
+        mode: "0755"
+      when: not llvm.stat.exists
+      loop: "{{ versions }}"
+
+    - name: Configure
+      ansible.builtin.command:
+        cmd: "cmake -S llvm -B build -G 'Unix Makefiles' -DCMAKE_INSTALL_PREFIX=/opt/llvm/{{ item }}/ -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS='clang;clang-tools-extra;cross-project-tests;libclc;lld;lldb;openmp;polly;pstl;mlir;flang' -DLLVM_ENABLE_RUNTIMES='compiler-rt'" # noqa yaml[line-length]
+        chdir: "/tmp/llvm-project-llvmorg-{{ item }}"
+      when: not llvm.stat.exists
+      loop: "{{ versions }}"
+
+    - name: Make and install
+      ansible.builtin.command:
+        cmd: make install -j 100
+        chdir: "/tmp/llvm-project-llvmorg-{{ item }}/build"
+      when: not llvm.stat.exists
+      loop: "{{ versions }}"
+
+    - name: Clean up archive
+      ansible.builtin.file:
+        path: "/tmp/llvmorg-{{ item }}.tar.gz"
+        state: absent
+      loop: "{{ versions }}"
+
+    - name: Clean up src
+      ansible.builtin.file:
+        path: "/tmp/llvm-project-llvmorg-{{ item }}"
+        state: absent
+      loop: "{{ versions }}"
+
+    - name: Clang Modulefiles
+      when: inventory_hostname in groups['head']
+      ansible.builtin.template:
+        src: "./templates/lmod/llvm-template.j2"
+        dest: "/work/modfiles/llvm/{{ item }}"
+        mode: "0755"
+      loop: "{{ versions }}"

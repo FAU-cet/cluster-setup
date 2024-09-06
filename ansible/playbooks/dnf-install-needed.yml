@@ -25,4 +25,16 @@
           - htop
           - btop
           - m4
+          - kernel-devel
+          - dkms
+          - ncurses-libs
+          - ncurses-devel
+          - ncurses-compat-libs
+          - ncdu
+          - perl-FindBin
+          - perl-File-Copy
+          - gmp-devel
+          - mpfr-devel
+          - libmpc-devel
+          - isl-devel
         state: present

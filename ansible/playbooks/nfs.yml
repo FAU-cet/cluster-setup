@@ -44,7 +44,7 @@
         path: /work
         src: /dev/disk/by-path/pci-0000:e1:00.0-nvme-1
         fstype: xfs
-        opts: noacl
+        opts: defaults
         state: mounted
 
     - name: Add mount entry to fstab

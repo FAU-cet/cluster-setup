@@ -1,0 +1,9 @@
+#%Module
+
+family "llvm"
+
+module-whatis "Name: llvm/clang {{ item }}"
+
+prepend-path "PATH" "/opt/llvm/{{ item }}/bin"
+prepend-path "LD_LIBRARY_PATH" "/opt/llvm/{{ item }}/lib"
+prepend-path "LD_RUN_PATH" "/opt/llvm/{{ item }}/lib"

@@ -1,0 +1,6 @@
+- name: Remount all filesystems
+  hosts: all
+
+  tasks:
+    - name: Remount # noqa command-instead-of-module
+      ansible.builtin.command: mount -a

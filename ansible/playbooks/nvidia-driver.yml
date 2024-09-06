@@ -18,16 +18,6 @@
         path: /etc/modprobe.d/blacklist-nouveau.conf
         line: "options nouveau modeset=0"
 
-    - name: Install NVIDIA driver prerequisites
-      ansible.builtin.dnf:
-        name:
-          - epel-release
-          - gcc
-          - kernel-devel
-          - dkms
-          - make
-        state: present
-
     - name: Add cuda repo
       ansible.builtin.command:
         cmd: dnf config-manager --add-repo http://developer.download.nvidia.com/compute/cuda/repos/rhel9/x86_64/cuda-rhel9.repo

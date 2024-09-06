@@ -1,0 +1,57 @@
+- name: Install cmake in different versions
+  hosts: all
+  vars:
+    versions:
+      - 3.30.3
+      - 3.29.8
+      - 3.28.6
+
+  tasks:
+
+    - name: Check if cmake is already installed
+      ansible.builtin.stat:
+        path: "/opt/cmake"
+      register: cmake
+
+    - name: Create folder
+      ansible.builtin.file:
+        path: "/opt/cmake/{{ item }}"
+        state: directory
+        mode: '0755'
+      loop: "{{ versions }}"
+
+    - name: Create module folder
+      when: inventory_hostname in groups['head']
+      ansible.builtin.file:
+        path: "/work/modfiles/cmake"
+        state: directory
+        mode: '0755'
+
+    - name: Download installer
+      ansible.builtin.get_url:
+        url: https://github.com/Kitware/CMake/releases/download/v{{ item }}/cmake-{{ item }}-linux-x86_64.sh
+        dest: "/tmp/cmake-{{ item }}.sh"
+        mode: "0777"
+      when: not cmake.stat.exists
+      loop: "{{ versions }}"
+
+    - name: Install
+      ansible.builtin.command:
+        cmd: sh cmake-{{ item }}.sh --skip-license --prefix=/opt/cmake/{{ item }}
+        chdir: /tmp
+      when: not cmake.stat.exists
+      loop: "{{ versions }}"
+
+    - name: Clean
+      ansible.builtin.file:
+        path: "/tmp/cmake-{{ item }}.sh"
+        state: absent
+      loop: "{{ versions }}"
+
+    - name: Modulefiles
+      when: inventory_hostname in groups['head']
+      ansible.builtin.template:
+        src: "./templates/lmod/cmake-template.j2"
+        dest: "/work/modfiles/cmake/{{ item }}"
+        mode: "0755"
+      loop: "{{ versions }}"
