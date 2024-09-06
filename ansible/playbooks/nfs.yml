@@ -1,4 +1,4 @@
-- name: Setup /home with NFS on head and compute nodes
+- name: Setup NFS (home, work) on head and compute nodes
   hosts: head
   become: true
   tasks:
@@ -10,10 +10,15 @@
           - nfs-utils
         state: present
 
-    - name: Format the disk with XFS filesystem
+    - name: Format the home disk with XFS filesystem
       community.general.filesystem:
         fstype: xfs
         dev: /dev/disk/by-path/pci-0000:62:00.0-nvme-1
+
+    - name: Format the work disk with XFS filesystem
+      community.general.filesystem:
+        fstype: xfs
+        dev: /dev/disk/by-path/pci-0000:e1:00.0-nvme-1
 
     - name: Create mount point /home if it does not exist
       ansible.builtin.file:
@@ -21,11 +26,25 @@
         state: directory
         mode: '0755'
 
+    - name: Create mount point /work if it does not exist
+      ansible.builtin.file:
+        path: /work
+        state: directory
+        mode: '0777'
+
     - name: Mount the disk to /home
       ansible.posix.mount:
         path: /home
         src: /dev/disk/by-path/pci-0000:62:00.0-nvme-1
         fstype: xfs
+        state: mounted
+
+    - name: Mount the disk to /work
+      ansible.posix.mount:
+        path: /work
+        src: /dev/disk/by-path/pci-0000:e1:00.0-nvme-1
+        fstype: xfs
+        opts: noacl
         state: mounted
 
     - name: Add mount entry to fstab
@@ -36,10 +55,25 @@
         opts: defaults
         state: present
 
+    - name: Add mount entry to fstab
+      ansible.posix.mount:
+        path: /work
+        src: /dev/disk/by-path/pci-0000:e1:00.0-nvme-1
+        fstype: xfs
+        opts: noacl
+        state: present
+
     - name: Configure NFS export for /home
       ansible.builtin.lineinfile:
         path: /etc/exports
         line: "/home  *(rw,sync,no_root_squash)"
+        create: true
+        mode: '0777'
+
+    - name: Configure NFS export for /work
+      ansible.builtin.lineinfile:
+        path: /etc/exports
+        line: "/work  *(rw,sync,no_root_squash)"
         create: true
         mode: '0777'
 
@@ -88,6 +122,12 @@
         state: directory
         mode: '0755'
 
+    - name: Create mount point /work if it does not exist
+      ansible.builtin.file:
+        path: /work
+        state: directory
+        mode: '0777'
+
     - name: Mount NFS share from head to /home
       ansible.posix.mount:
         path: /home
@@ -96,10 +136,26 @@
         opts: defaults
         state: mounted
 
-    - name: Add NFS mount entry to fstab
+    - name: Mount NFS share from head to /work
+      ansible.posix.mount:
+        path: /work
+        src: "head:/work"
+        fstype: nfs
+        opts: noacl
+        state: mounted
+
+    - name: Add home NFS mount entry to fstab
       ansible.posix.mount:
         path: /home
         src: "head:/home"
         fstype: nfs
         opts: defaults
+        state: present
+
+    - name: Add work NFS mount entry to fstab
+      ansible.posix.mount:
+        path: /work
+        src: "head:/work"
+        fstype: nfs
+        opts: noacl
         state: present

@@ -1,0 +1,25 @@
+- name: Setup module (lmod)
+  hosts: all
+  tasks:
+
+    - name: Install package
+      ansible.builtin.dnf:
+        name: Lmod
+        state: present
+
+    - name: Set module path
+      ansible.builtin.lineinfile:
+        path: /etc/profile.d/lmodstuff.sh
+        line: "export MODULEPATH=/work/modfiles:$MODULEPATH"
+        create: true
+        mode: '0755'
+
+    - name: Copy module files
+      when: inventory_hostname in groups['head']
+      ansible.posix.synchronize:
+        mode: push
+        src: "./templates/modfiles/"
+        dest: "/work/modfiles/"
+        recursive: true
+        rsync_opts:
+          - "--delete --chmod=777 --chown=root:root"

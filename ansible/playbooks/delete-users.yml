@@ -1,0 +1,25 @@
+- name: Delete users, only use if something goes wrong
+  hosts: nodes
+  vars:
+    users:
+      - adrian
+      - jay
+      - johannes
+      - melanie
+      - nils
+      - onur
+      - tobias
+
+  tasks:
+    - name: Delete users
+      ansible.builtin.user:
+        name: "{{ item }}"
+        state: absent
+      loop: "{{ users }}"
+
+    - name: Delete home
+      when: inventory_hostname in groups['head']
+      ansible.builtin.file:
+        path: "/home/{{ item }}"
+        state: absent
+      loop: "{{ users }}"

@@ -1,0 +1,20 @@
+- name: Download and install Anaconda
+  hosts: all
+  vars:
+    version: 2024.06-1
+
+  tasks:
+
+    - name: Download
+      ansible.builtin.get_url:
+        url: https://repo.anaconda.com/archive/Anaconda3-{{ version }}-Linux-x86_64.sh
+        dest: /tmp/anaconda.sh
+        mode: "0777"
+
+    - name: Install
+      ansible.builtin.command: bash /tmp/anaconda.sh -b -f -p /opt/anaconda
+
+    - name: Remove temp file
+      ansible.builtin.file:
+        path: /tmp/anaconda.sh
+        state: absent

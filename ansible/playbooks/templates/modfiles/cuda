@@ -1,0 +1,13 @@
+#%Module
+
+set base "/usr/local/cuda"
+
+family "cuda"
+
+module-whatis "Name: CUDA"
+
+prepend-path "PATH" "$base/bin"
+prepend-path "LD_LIBRARY_PATH" "$base/lib64"
+setenv "CUDA_PATH" $base
+setenv "CUDA_HOME" $base
+setenv "CUDA_ROOT" $base

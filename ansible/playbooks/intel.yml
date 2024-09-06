@@ -1,0 +1,44 @@
+- name: Download and install Intel HPC toolkit
+  hosts: all
+  tasks:
+
+    - name: Check if already installed
+      ansible.builtin.stat:
+        path: /opt/intel
+      register: intelhpc
+
+    - name: Download 2023
+      ansible.builtin.get_url:
+        url: https://registrationcenter-download.intel.com/akdlm/IRC_NAS/0722521a-34b5-4c41-af3f-d5d14e88248d/l_HPCKit_p_2023.2.0.49440_offline.sh
+        dest: /tmp/intelhpc2023.sh
+        mode: "0777"
+      when: not intelhpc.stat.exists
+
+    - name: Download 2024
+      ansible.builtin.get_url:
+        url: https://registrationcenter-download.intel.com/akdlm/IRC_NAS/d461a695-6481-426f-a22f-b5644cd1fa8b/l_HPCKit_p_2024.2.1.79_offline.sh
+        dest: /tmp/intelhpc2024.sh
+        mode: "0777"
+      when: not intelhpc.stat.exists
+
+    - name: Install
+      ansible.builtin.command: sudo sh /tmp/intelhpc{{ item }}.sh -a --silent --cli --eula accept
+      when: not intelhpc.stat.exists
+      loop:
+        - 2023
+        - 2024
+
+    - name: Remove tempfiles
+      ansible.builtin.file:
+        path: "/tmp/intelhpc{{ item }}.sh"
+        state: absent
+      loop:
+        - 2023
+        - 2024
+
+- name: Setup module files
+  hosts: head
+  tasks:
+
+    - name: Intel script
+      ansible.builtin.command: /opt/intel/oneapi/modulefiles-setup.sh --force --output-dir=/work/modfiles/intel
