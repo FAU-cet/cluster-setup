@@ -25,7 +25,7 @@ Detailed description:
 | OPNsense | DHCP (WAN)<br>10.1.1.1/24 (LAN) | opnsense<br>router<br>gateway<br>dns | Router, DHCP-server, DNS-server, Gateway, running OPNsense |
 | switch   | 10.1.1.2   |           | Managed L3-switch          |
 | viz      | 10.1.1.3   | viz       | Tower-PC for X-Forwarding* |
-| drain    | 10.1.1.11  | drain     | HEAD-node, CPU-only        |
+| drain    | 10.1.1.11  | drain<br>head    | HEAD-node, CPU-only        |
 | mdrain   | 10.1.1.111 | mdrain    | Management for drain       |
 | hot      | 10.1.1.22  | hot       | Compute-node, 4x H100      |
 | mhot     | 10.1.1.122 | mhot      | Management for hot         |
