@@ -340,7 +340,7 @@
         <item/>
       </numberoptions>
       <range>
-        <from>10.1.1.2</from>
+        <from>10.1.1.200</from>
         <to>10.1.1.254</to>
       </range>
       <winsserver/>
