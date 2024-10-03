@@ -18,7 +18,7 @@
         name:
           - gcc
           - g++
-          - clang
+          # - clang
           - make
           - cmake
           - git

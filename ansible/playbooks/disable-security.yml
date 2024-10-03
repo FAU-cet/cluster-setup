@@ -11,3 +11,9 @@
         path: /etc/selinux/config
         regexp: '^SELINUX='
         line: 'SELINUX=permissive'
+
+    - name: Disable firewall
+      ansible.builtin.service:
+        name: firewalld
+        state: stopped
+        enabled: false
