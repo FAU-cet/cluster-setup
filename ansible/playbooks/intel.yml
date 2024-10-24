@@ -1,4 +1,4 @@
-- name: Download and install Intel HPC toolkit
+- name: Download and install Intel toolkit
   hosts: all
   tasks:
 
@@ -7,14 +7,21 @@
         path: /opt/intel
       register: intelhpc
 
-    - name: Download 2023
+    - name: Download 2024 base
+      ansible.builtin.get_url:
+        url: https://registrationcenter-download.intel.com/akdlm/IRC_NAS/e6ff8e9c-ee28-47fb-abd7-5c524c983e1c/l_BaseKit_p_2024.2.1.100_offline.sh
+        dest: /tmp/intelbase2024.sh
+        mode: "0777"
+      when: not intelhpc.stat.exists
+
+    - name: Download 2023 hpc
       ansible.builtin.get_url:
         url: https://registrationcenter-download.intel.com/akdlm/IRC_NAS/0722521a-34b5-4c41-af3f-d5d14e88248d/l_HPCKit_p_2023.2.0.49440_offline.sh
         dest: /tmp/intelhpc2023.sh
         mode: "0777"
       when: not intelhpc.stat.exists
 
-    - name: Download 2024
+    - name: Download 2024 hpc
       ansible.builtin.get_url:
         url: https://registrationcenter-download.intel.com/akdlm/IRC_NAS/d461a695-6481-426f-a22f-b5644cd1fa8b/l_HPCKit_p_2024.2.1.79_offline.sh
         dest: /tmp/intelhpc2024.sh
@@ -22,19 +29,21 @@
       when: not intelhpc.stat.exists
 
     - name: Install
-      ansible.builtin.command: sudo sh /tmp/intelhpc{{ item }}.sh -a --silent --cli --eula accept
+      ansible.builtin.command: sudo sh /tmp/intel{{ item }}.sh -a --silent --cli --eula accept
       when: not intelhpc.stat.exists
       loop:
-        - 2023
-        - 2024
+        - base2024
+        - hpc2023
+        - hpc2024
 
     - name: Remove tempfiles
       ansible.builtin.file:
-        path: "/tmp/intelhpc{{ item }}.sh"
+        path: "/tmp/intel{{ item }}.sh"
         state: absent
       loop:
-        - 2023
-        - 2024
+        - base2024
+        - hpc2023
+        - hpc2024
 
 - name: Setup module files
   hosts: head
