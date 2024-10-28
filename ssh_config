@@ -3,6 +3,7 @@ Host faucet
 	User root
 	# TODO: change this to actual IP when on-site
 	HostName 10.188.33.84
+	# HostName 10.0.0.1
 	StrictHostKeyChecking no
 	UserKnownHostsFile /dev/null
 	Compression yes
@@ -30,7 +31,7 @@ Host viz
 
 # copute nodes
 Host drain hot cold
-	 # TODO: change to own user
+	# TODO: change to own user
 	User root
 	StrictHostKeyChecking no
 	UserKnownHostsFile /dev/null
