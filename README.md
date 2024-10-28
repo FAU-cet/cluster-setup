@@ -33,7 +33,7 @@ Detailed description:
 | mhot     | 10.0.1.122 |      | Management for hot         |
 | cold     | 10.0.1.33  |      | Compute-node, 4x H100      |
 | mcold    | 10.0.1.133 |      | Management for cold        |
-| others   | DHCP       |      | Other devices connected to switch, will receive 10.0.3.1-254/24 as DHCP-leases |
+| others   | DHCP       |      | Other devices connected to switch, will receive 10.0.3.1-254/22 as DHCP-leases |
 
 MAC-Addresses:
 
