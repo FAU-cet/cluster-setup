@@ -211,6 +211,9 @@
       <groupname>admins</groupname>
       <password>$2y$11$ROrmOW4.4bR5WpmCXg7tHeum1FRoIjmvLspfPIQs/ZJMlKoaGbMU2</password>
       <uid>0</uid>
+      <expires/>
+      <authorizedkeys>c3NoLXJzYSBBQUFBQjNOemFDMXljMkVBQUFBREFRQUJBQUFCZ1FDbXpUKzFPWTJoTjQ4RmtTajlYdlpkK1Z0amxHNFo0b3JJQ1N6cDBodFlJWUt4WU05K3hMZmg5am9TclJpTGZ5d0JPK3JBc2ZZcGppY2pTeXNwQVZzYlRIZEh2K3hsbWl3S3JqcDRxejFvd0NqcVBXb2l3aElFOWRNVFlDSlQ4Wlk2TERMcTh5OTBBd1BNRkdIZUNWWDFWWS95TzZObzBrd1I2WXVZbXNiRGk0V0FpQkFRMFV2bGZ5QUNjcmhueVVoODRiWTRaNWhhbHBvR1ZlK01HRUFqakw5elNmRXVvT25SeXo5RStMUzl5NE53YTV6cStpbC9XL2l4RTVlSFpPTnpWNGpIbE1xVUNVcjhtbGVPMUNJc1Vpc01tYmEyYTUzOTJldVExMjF1MHQ3QWI1czVVTDNvZ1dLT251L2tLS01tbVNUMkNkcER0V01IL1FjaWxZVjRhcTVyZGgxMVhHY1hDUTFHL1Vkcjdtd1hQLzJzeVEzeXNObUhqa2dRdkp5VDhYaGkvVWFyaSswNUZmVjc5cTgyb2pGYm44M2ZxcFFHMUlacjcrNXR6d3lERlpQNjJjUWVrbXBJMExOV1dKQlNUbHNseExIRUdFRXpLUEI5d0ZMeDRqOVJsL3NVbnRyUGRLNk1kbnZXeWxwWEZaOG13MCt2UW8wU3VzRHVVQjg9IHVzZXJAZmF1Y2V0</authorizedkeys>
+      <otp_seed/>
     </user>
     <nextuid>2000</nextuid>
     <nextgid>2000</nextgid>
@@ -478,8 +481,8 @@
   </widgets>
   <revision>
     <username>root@fe80::cffe:46b5:3a3b:e736</username>
-    <time>1730127270.1562</time>
-    <description>/services_dhcp.php made changes</description>
+    <time>1730129217.4976</time>
+    <description>user "root" changed</description>
   </revision>
   <OPNsense>
     <DHCRelay version="1.0.1"/>
