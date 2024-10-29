@@ -8,5 +8,5 @@ send_command() {
 send_command drain &
 send_command hot &
 send_command cold &
-send_command viz &
+# send_command viz &
 wait
