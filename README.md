@@ -92,3 +92,21 @@ The firewall blocks all inbound access attempts, only letting through outbound t
 It's still undecided whether to log firewall messages, log settings may change on-site.
 On the one hand, having a clear log is good for detecting an attack chain,
 though writing every denied access into a log can lead to rather difficult to mitigate DOS attacks.
+
+# Spack
+
+Software can be installed via Spack.
+Installations are automatically synced to all nodes.
+To ensure a fast and stable interface, run the install commands on the head node (due to nfs).
+
+Because nfs messes with filesystem locking, use this to be safe:
+
+```
+sudo spack -L install <package>
+```
+
+To export the modfiles, run:
+
+```
+sudo spack module tcl refresh -y
+```

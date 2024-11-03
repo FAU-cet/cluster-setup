@@ -1,0 +1,80 @@
+- name: Install Spack on HPC
+  hosts: head
+  vars:
+    spack_install_dir: /apps/spack # Also have to change below
+    spack_modules_dir: /apps/modulefiles/spack
+    spack_repo_url: https://github.com/spack/spack.git
+    spack_repo_branch: develop  # Use 'develop' for latest or replace with a stable tag
+  tasks:
+    - name: Ensure dependencies are installed
+      ansible.builtin.dnf:
+        name:
+          - git
+          - python3
+          - python3-pip
+          - Lmod
+        state: present
+
+    - name: Clone the Spack repository
+      ansible.builtin.git:
+        repo: "{{ spack_repo_url }}"
+        dest: "{{ spack_install_dir }}"
+        version: "{{ spack_repo_branch }}"
+        update: true
+
+    - name: Add Spack setup to profile.d for automatic loading
+      ansible.builtin.copy:
+        dest: /etc/profile.d/spack.sh
+        content: |
+          # Spack environment setup
+          export SPACK_ROOT="{{ spack_install_dir }}"
+          . "${SPACK_ROOT}/share/spack/setup-env.sh"
+        mode: "0755"
+
+    - name: Source Spack setup script (so Spack commands can be used in the playbook)
+      ansible.builtin.shell: . /etc/profile.d/spack.sh
+      args:
+        executable: /bin/bash
+
+    - name: Configure Spack to use custom module directory
+      ansible.builtin.shell: |
+        spack config add "modules:default:roots:tcl: {{ spack_modules_dir }}"
+      args:
+        executable: /bin/bash
+      environment:
+        SPACK_ROOT: "{{ spack_install_dir }}"
+      when: spack_modules_dir is defined
+
+    - name: Create the module directory
+      ansible.builtin.file:
+        path: "{{ spack_modules_dir }}"
+        state: directory
+        owner: root
+        group: root
+        mode: "0755"
+
+    - name: Ensure sudoers file is configured for spack installs
+      ansible.builtin.lineinfile:
+        path: /etc/sudoers
+        state: present
+        validate: 'visudo -cf %s'
+        line: 'Defaults secure_path = /apps/spack/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+
+- name: Create profile.d script
+  hosts: compute
+  tasks:
+    - name: Add Spack setup to profile.d for automatic loading
+      ansible.builtin.copy:
+        dest: /etc/profile.d/spack.sh
+        content: |
+          # Spack environment setup
+          export SPACK_ROOT="/apps/spack"
+          . "${SPACK_ROOT}/share/spack/setup-env.sh"
+        mode: "0755"
+
+    - name: Ensure sudoers file is configured for spack installs
+      ansible.builtin.lineinfile:
+        path: /etc/sudoers
+        state: present
+        validate: 'visudo -cf %s'
+        line: 'Defaults secure_path = /apps/spack/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'

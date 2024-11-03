@@ -18,6 +18,7 @@
         name:
           - gcc
           - g++
+          - gfortran
           # - clang
           - make
           - cmake
