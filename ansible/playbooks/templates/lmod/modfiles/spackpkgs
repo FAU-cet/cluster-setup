@@ -1,0 +1,5 @@
+#%Module
+
+module-whatis "Name: Modfiles for Spack packages"
+module use --append /apps/spack/modules/linux-almalinux9-ivybridge
+module use --append /apps/spack/modules/linux-almalinux9-zen4

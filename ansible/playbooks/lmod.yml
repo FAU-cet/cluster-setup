@@ -2,7 +2,12 @@
   hosts: all
   tasks:
 
-    - name: Install package
+    - name: No environment-module
+      ansible.builtin.dnf:
+        name: environment-modules
+        state: absent
+
+    - name: Install Lmod
       ansible.builtin.dnf:
         name: Lmod
         state: present

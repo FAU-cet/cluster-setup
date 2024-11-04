@@ -2,7 +2,7 @@
   hosts: head
   vars:
     spack_install_dir: /apps/spack # Also have to change below
-    spack_modules_dir: /apps/modulefiles/spack
+    spack_modules_dir: /apps/spack/modules
     spack_repo_url: https://github.com/spack/spack.git
     spack_repo_branch: develop  # Use 'develop' for latest or replace with a stable tag
   tasks:
