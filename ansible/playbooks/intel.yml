@@ -2,22 +2,22 @@
   hosts: all
   tasks:
     # for reinstall
-    - name: Remove folder
-      ansible.builtin.file:
-        path: /opt/intel
-        state: absent
-    - name: Remove root folder
-      ansible.builtin.file:
-        path: /root/intel
-        state: absent
-    - name: Remove tmp folder
-      ansible.builtin.file:
-        path: /tmp/root
-        state: absent
-    - name: Remove var folder
-      ansible.builtin.file:
-        path: /var/intel
-        state: absent
+    # - name: Remove folder
+    #   ansible.builtin.file:
+    #     path: /opt/intel
+    #     state: absent
+    # - name: Remove root folder
+    #   ansible.builtin.file:
+    #     path: /root/intel
+    #     state: absent
+    # - name: Remove tmp folder
+    #   ansible.builtin.file:
+    #     path: /tmp/root
+    #     state: absent
+    # - name: Remove var folder
+    #   ansible.builtin.file:
+    #     path: /var/intel
+    #     state: absent
     # - name: Remove tempfiles
     #   ansible.builtin.file:
     #     path: "/tmp/intel{{ item }}.sh"
