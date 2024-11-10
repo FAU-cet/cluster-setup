@@ -1,16 +1,77 @@
 - name: Download and install Intel toolkit
   hosts: all
   tasks:
+    # for reinstall
+    - name: Remove folder
+      ansible.builtin.file:
+        path: /opt/intel
+        state: absent
+    - name: Remove root folder
+      ansible.builtin.file:
+        path: /root/intel
+        state: absent
+    - name: Remove tmp folder
+      ansible.builtin.file:
+        path: /tmp/root
+        state: absent
+    - name: Remove var folder
+      ansible.builtin.file:
+        path: /var/intel
+        state: absent
+    # - name: Remove tempfiles
+    #   ansible.builtin.file:
+    #     path: "/tmp/intel{{ item }}.sh"
+    #     state: absent
+    #   loop:
+    #     - base2021
+    #     - base2022
+    #     - base2024
+    #     - base2025
+    #     - hpc2023
+    #     - hpc2024
+    #     - hpc2025
 
     - name: Check if already installed
       ansible.builtin.stat:
         path: /opt/intel
       register: intelhpc
 
+    - name: Dnf packages for older versions
+      ansible.builtin.dnf:
+        name:
+          - libnotify
+          - gtk3
+          - libdrm
+          - mesa-libgbm
+          - at-spi2-core
+        state: present
+
+    # seems like this got nuked from the servers...
+    # - name: Download 2021 base
+    #   ansible.builtin.get_url:
+    #     url: https://registrationcenter-download.intel.com/akdlm/irc_nas/17431/l_BaseKit_p_2021.1.0.2659_offline.sh
+    #     dest: /tmp/intelbase2021.sh
+    #     mode: "0777"
+    #   when: not intelhpc.stat.exists
+
+    - name: Download 2022 base
+      ansible.builtin.get_url:
+        url: https://registrationcenter-download.intel.com/akdlm/irc_nas/18673/l_BaseKit_p_2022.2.0.262_offline.sh
+        dest: /tmp/intelbase2022.sh
+        mode: "0777"
+      when: not intelhpc.stat.exists
+
     - name: Download 2024 base
       ansible.builtin.get_url:
         url: https://registrationcenter-download.intel.com/akdlm/IRC_NAS/e6ff8e9c-ee28-47fb-abd7-5c524c983e1c/l_BaseKit_p_2024.2.1.100_offline.sh
         dest: /tmp/intelbase2024.sh
+        mode: "0777"
+      when: not intelhpc.stat.exists
+
+    - name: Download 2025 base
+      ansible.builtin.get_url:
+        url: https://registrationcenter-download.intel.com/akdlm/IRC_NAS/96aa5993-5b22-4a9b-91ab-da679f422594/intel-oneapi-base-toolkit-2025.0.0.885_offline.sh
+        dest: /tmp/intelbase2025.sh
         mode: "0777"
       when: not intelhpc.stat.exists
 
@@ -28,22 +89,38 @@
         mode: "0777"
       when: not intelhpc.stat.exists
 
-    - name: Install
+    - name: Download 2025 hpc
+      ansible.builtin.get_url:
+        url: https://registrationcenter-download.intel.com/akdlm/IRC_NAS/0884ef13-20f3-41d3-baa2-362fc31de8eb/intel-oneapi-hpc-toolkit-2025.0.0.825_offline.sh
+        dest: /tmp/intelhpc2025.sh
+        mode: "0777"
+      when: not intelhpc.stat.exists
+
+    - name: Install # noqa ignore-errors
       ansible.builtin.command: sudo sh /tmp/intel{{ item }}.sh -a --silent --cli --eula accept
+      ignore_errors: true
       when: not intelhpc.stat.exists
       loop:
+        # - base2021
+        - base2022
         - base2024
+        - base2025
         - hpc2023
         - hpc2024
+        - hpc2025
 
     - name: Remove tempfiles
       ansible.builtin.file:
         path: "/tmp/intel{{ item }}.sh"
         state: absent
       loop:
+        - base2021
+        - base2022
         - base2024
+        - base2025
         - hpc2023
         - hpc2024
+        - hpc2025
 
 - name: Setup module files
   hosts: head
