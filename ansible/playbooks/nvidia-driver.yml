@@ -1,3 +1,17 @@
+- name: Install repos and CUDA
+  hosts: all
+
+  tasks:
+    - name: Add cuda repo
+      ansible.builtin.command:
+        cmd: dnf config-manager --add-repo http://developer.download.nvidia.com/compute/cuda/repos/rhel9/x86_64/cuda-rhel9.repo
+    
+    - name: Install cuda
+      ansible.builtin.dnf:
+        name: cuda
+        state: present
+
+
 - name: Install Nvidia GPU driver
   hosts: gpu
   become: true
@@ -18,14 +32,9 @@
         path: /etc/modprobe.d/blacklist-nouveau.conf
         line: "options nouveau modeset=0"
 
-    - name: Add cuda repo
-      ansible.builtin.command:
-        cmd: dnf config-manager --add-repo http://developer.download.nvidia.com/compute/cuda/repos/rhel9/x86_64/cuda-rhel9.repo
-
     - name: Install nvidia driver module
       ansible.builtin.dnf:
         name:
           - "nvidia-driver"
           - "nvidia-settings"
-          - cuda
         state: latest
