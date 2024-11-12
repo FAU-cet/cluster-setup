@@ -1,28 +1,29 @@
 - name: Install llvm/clang in different versions
-  hosts: all
+  hosts: head
   vars:
     versions:
       - 18.1.8
       - 17.0.6
       - 16.0.6
       - 15.0.7
+    makejobs: 20
 
   tasks:
     - name: Check if llvm is already installed
       ansible.builtin.stat:
-        path: "/opt/llvm"
+        path: "/apps/llvm"
       register: llvm
 
     - name: Create folder
       ansible.builtin.file:
-        path: "/opt/llvm"
+        path: "/apps/llvm"
         state: directory
         mode: '0755'
 
     - name: Create module folder
       when: inventory_hostname in groups['head']
       ansible.builtin.file:
-        path: "/work/modfiles/llvm"
+        path: "/apps/modulefiles/llvm"
         state: directory
         mode: '0755'
 
@@ -45,14 +46,14 @@
 
     - name: Configure
       ansible.builtin.command:
-        cmd: "cmake -S llvm -B build -G 'Unix Makefiles' -DCMAKE_INSTALL_PREFIX=/opt/llvm/{{ item }}/ -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS='clang;clang-tools-extra;cross-project-tests;libclc;lld;lldb;openmp;polly;pstl;mlir;flang' -DLLVM_ENABLE_RUNTIMES='compiler-rt'" # noqa yaml[line-length]
+        cmd: "cmake -S llvm -B build -G 'Unix Makefiles' -DCMAKE_INSTALL_PREFIX=/apps/llvm/{{ item }}/ -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS='clang;clang-tools-extra;cross-project-tests;libclc;lld;lldb;openmp;polly;pstl;mlir;flang' -DLLVM_ENABLE_RUNTIMES='compiler-rt'" # noqa yaml[line-length]
         chdir: "/tmp/llvm-project-llvmorg-{{ item }}"
       when: not llvm.stat.exists
       loop: "{{ versions }}"
 
     - name: Make and install
       ansible.builtin.command:
-        cmd: make install -j 100
+        cmd: make install -j {{ makejobs }}
         chdir: "/tmp/llvm-project-llvmorg-{{ item }}/build"
       when: not llvm.stat.exists
       loop: "{{ versions }}"
@@ -73,6 +74,6 @@
       when: inventory_hostname in groups['head']
       ansible.builtin.template:
         src: "./templates/lmod/llvm-template.j2"
-        dest: "/work/modfiles/llvm/{{ item }}"
+        dest: "/apps/modulefiles/llvm/{{ item }}"
         mode: "0755"
       loop: "{{ versions }}"

@@ -153,3 +153,12 @@
         fstype: nfs
         opts: noacl
         state: present
+
+- name: Create /scratch folder
+  hosts: all
+  tasks:
+    - name: Create folder
+      ansible.builtin.file:
+        path: /scratch
+        state: directory
+        mode: '0777'

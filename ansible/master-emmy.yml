@@ -6,12 +6,13 @@
 # - ansible.builtin.import_playbook: playbooks/nfs.yml
 - ansible.builtin.import_playbook: playbooks/nfs-emmy.yml
 - ansible.builtin.import_playbook: playbooks/setup-users.yml
-- ansible.builtin.import_playbook: playbooks/nvidia-driver.yml
+# - ansible.builtin.import_playbook: playbooks/nvidia-driver.yml
 - ansible.builtin.import_playbook: playbooks/lmod.yml
 - ansible.builtin.import_playbook: playbooks/anaconda.yml
 - ansible.builtin.import_playbook: playbooks/intel.yml
 # - ansible.builtin.import_playbook: playbooks/cmake.yml
 # - ansible.builtin.import_playbook: playbooks/llvm.yml
 # - ansible.builtin.import_playbook: playbooks/gcc.yml
+- ansible.builtin.import_playbook: playbooks/spack.yml
 
 - ansible.builtin.import_playbook: playbooks/reboot.yml

@@ -1,29 +1,30 @@
 - name: Install gcc in different versions
-  hosts: all
+  hosts: head
   vars:
     versions:
-      - 14.2.0
-      - 13.3.0
-      - 12.4.0
-      - 11.5.0
+      # - 14.2.0
+      # - 13.3.0
+      # - 12.4.0
+      # - 11.5.0
       - 10.5.0
+    makejobs: 20
 
   tasks:
     - name: Check if gcc is already installed
       ansible.builtin.stat:
-        path: "/opt/gcc"
+        path: "/apps/gcc"
       register: gcc
 
     - name: Create folder
       ansible.builtin.file:
-        path: "/opt/gcc"
+        path: "/apps/gcc"
         state: directory
         mode: '0755'
 
     - name: Create module folder
       when: inventory_hostname in groups['head']
       ansible.builtin.file:
-        path: "/work/modfiles/gcc"
+        path: "/apps/modulefiles/gcc"
         state: directory
         mode: '0755'
 
@@ -46,14 +47,14 @@
 
     - name: Configure
       ansible.builtin.command:
-        cmd: "./configure --prefix /opt/gcc/{{ item }} --disable-multilib"
+        cmd: "./configure --prefix /apps/gcc/{{ item }} --disable-multilib"
         chdir: /tmp/gcc-{{ item }}
       when: not gcc.stat.exists
       loop: "{{ versions }}"
 
     - name: Build
       ansible.builtin.command:
-        cmd: make -j 100
+        cmd: make -j {{ makejobs }}
         chdir: /tmp/gcc-{{ item }}
       when: not gcc.stat.exists
       loop: "{{ versions }}"
@@ -78,9 +79,9 @@
       loop: "{{ versions }}"
 
     - name: Modulefiles
-      when: inventory_hostname in groups['head']
+      # when: inventory_hostname in groups['head']
       ansible.builtin.template:
         src: "./templates/lmod/gcc-template.j2"
-        dest: "/work/modfiles/gcc/{{ item }}"
+        dest: "/apps/modulefiles/gcc/{{ item }}"
         mode: "0755"
       loop: "{{ versions }}"

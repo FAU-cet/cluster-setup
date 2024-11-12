@@ -4,8 +4,8 @@ family "gcc"
 
 module-whatis "Name: gcc {{ item }}"
 
-prepend-path "PATH" "/opt/gcc/{{ item }}/bin"
-prepend-path "LD_LIBRARY_PATH" "/opt/gcc/{{ item }}/lib"
-prepend-path "LD_LIBRARY_PATH" "/opt/gcc/{{ item }}/lib64"
-prepend-path "LD_RUN_PATH" "/opt/gcc/{{ item }}/lib"
-prepend-path "LD_RUN_PATH" "/opt/gcc/{{ item }}/lib64"
+prepend-path "PATH" "/apps/gcc/{{ item }}/bin"
+prepend-path "LD_LIBRARY_PATH" "/apps/gcc/{{ item }}/lib"
+prepend-path "LD_LIBRARY_PATH" "/apps/gcc/{{ item }}/lib64"
+prepend-path "LD_RUN_PATH" "/apps/gcc/{{ item }}/lib"
+prepend-path "LD_RUN_PATH" "/apps/gcc/{{ item }}/lib64"

@@ -15,7 +15,7 @@
     - name: Set module path
       ansible.builtin.lineinfile:
         path: /etc/profile.d/lmodstuff.sh
-        line: "export MODULEPATH=/work/modfiles:$MODULEPATH"
+        line: "export MODULEPATH=/apps/modulefiles:/apps/nvhpc_sdk/modulefiles:$MODULEPATH"
         create: true
         mode: '0755'
 
@@ -24,7 +24,7 @@
       ansible.posix.synchronize:
         mode: push
         src: "./templates/lmod/modfiles/"
-        dest: "/work/modfiles/"
+        dest: "/apps/modulefiles/"
         recursive: true
         rsync_opts:
           - "--delete --chmod=777 --chown=root:root"

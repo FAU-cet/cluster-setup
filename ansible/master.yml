@@ -1,5 +1,6 @@
 - ansible.builtin.import_playbook: playbooks/ping.yml
 - ansible.builtin.import_playbook: playbooks/dnf-update.yml
+- ansible.builtin.import_playbook: playbooks/reboot.yml
 - ansible.builtin.import_playbook: playbooks/dnf-install-needed.yml
 - ansible.builtin.import_playbook: playbooks/disable-security.yml
 - ansible.builtin.import_playbook: playbooks/nfs.yml
@@ -11,5 +12,6 @@
 - ansible.builtin.import_playbook: playbooks/cmake.yml
 - ansible.builtin.import_playbook: playbooks/llvm.yml
 - ansible.builtin.import_playbook: playbooks/gcc.yml
+- ansible.builtin.import_playbook: playbooks/spack.yml
 
 - ansible.builtin.import_playbook: playbooks/reboot.yml

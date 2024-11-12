@@ -1,4 +1,4 @@
-- name: Ensure SELinux is set to permissive mode
+- name: Disable security for installation (will be reactivated later)
   hosts: nodes
   become: true
   tasks:
