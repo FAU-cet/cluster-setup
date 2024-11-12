@@ -270,8 +270,8 @@
     <dnsserver>9.9.9.9</dnsserver>
     <dnsserver>1.1.1.1</dnsserver>
     <dnsallowoverride_exclude/>
-    <dns1gw>none</dns1gw>
-    <dns2gw>none</dns2gw>
+    <dns1gw>WAN_GW</dns1gw>
+    <dns2gw>WAN_GW</dns2gw>
     <dns3gw>none</dns3gw>
     <dns4gw>none</dns4gw>
     <dns5gw>none</dns5gw>
@@ -283,18 +283,60 @@
   </system>
   <interfaces>
     <wan>
-      <enable>1</enable>
       <if>vtnet0</if>
-      <ipaddr>dhcp</ipaddr>
-      <ipaddrv6>dhcp6</ipaddrv6>
-      <gateway>WAN_GW</gateway>
+      <descr/>
+      <enable>1</enable>
+      <spoofmac>00:25:90:8a:8e:ea</spoofmac>
       <blockpriv>1</blockpriv>
       <blockbogons>1</blockbogons>
-      <media/>
-      <mediaopt/>
+      <ipaddr>dhcp</ipaddr>
+      <dhcphostname/>
+      <alias-address/>
+      <alias-subnet>32</alias-subnet>
+      <dhcprejectfrom/>
+      <adv_dhcp_pt_timeout/>
+      <adv_dhcp_pt_retry/>
+      <adv_dhcp_pt_select_timeout/>
+      <adv_dhcp_pt_reboot/>
+      <adv_dhcp_pt_backoff_cutoff/>
+      <adv_dhcp_pt_initial_interval/>
+      <adv_dhcp_pt_values>SavedCfg</adv_dhcp_pt_values>
+      <adv_dhcp_send_options/>
+      <adv_dhcp_request_options/>
+      <adv_dhcp_required_options/>
+      <adv_dhcp_option_modifiers/>
+      <adv_dhcp_config_advanced/>
+      <adv_dhcp_config_file_override/>
+      <adv_dhcp_config_file_override_path/>
+      <ipaddrv6>dhcp6</ipaddrv6>
       <dhcp6-ia-pd-len>0</dhcp6-ia-pd-len>
-      <subnetv6/>
-      <gatewayv6/>
+      <adv_dhcp6_interface_statement_send_options/>
+      <adv_dhcp6_interface_statement_request_options/>
+      <adv_dhcp6_interface_statement_information_only_enable/>
+      <adv_dhcp6_interface_statement_script/>
+      <adv_dhcp6_id_assoc_statement_address_enable/>
+      <adv_dhcp6_id_assoc_statement_address/>
+      <adv_dhcp6_id_assoc_statement_address_id/>
+      <adv_dhcp6_id_assoc_statement_address_pltime/>
+      <adv_dhcp6_id_assoc_statement_address_vltime/>
+      <adv_dhcp6_id_assoc_statement_prefix_enable/>
+      <adv_dhcp6_id_assoc_statement_prefix/>
+      <adv_dhcp6_id_assoc_statement_prefix_id/>
+      <adv_dhcp6_id_assoc_statement_prefix_pltime/>
+      <adv_dhcp6_id_assoc_statement_prefix_vltime/>
+      <adv_dhcp6_prefix_interface_statement_sla_len/>
+      <adv_dhcp6_authentication_statement_authname/>
+      <adv_dhcp6_authentication_statement_protocol/>
+      <adv_dhcp6_authentication_statement_algorithm/>
+      <adv_dhcp6_authentication_statement_rdm/>
+      <adv_dhcp6_key_info_statement_keyname/>
+      <adv_dhcp6_key_info_statement_realm/>
+      <adv_dhcp6_key_info_statement_keyid/>
+      <adv_dhcp6_key_info_statement_secret/>
+      <adv_dhcp6_key_info_statement_expire/>
+      <adv_dhcp6_config_advanced/>
+      <adv_dhcp6_config_file_override/>
+      <adv_dhcp6_config_file_override_path/>
     </wan>
     <lan>
       <if>vtnet1</if>
@@ -329,6 +371,7 @@
       <filename>netboot.xyz.kpxe</filename>
       <filename32>netboot.xyz.efi</filename32>
       <filename64>netboot.xyz.efi</filename64>
+      <filenameipxe>netboot.xyz.kpxe</filenameipxe>
       <numberoptions>
         <item/>
       </numberoptions>
@@ -431,6 +474,83 @@
         <dnsserver/>
         <ntpserver/>
       </staticmap>
+      <staticmap>
+        <mac>00:25:90:8a:64:62</mac>
+        <ipaddr>10.0.2.2</ipaddr>
+        <hostname>emmy2</hostname>
+        <descr>1x V100</descr>
+        <winsserver/>
+        <dnsserver/>
+        <ntpserver/>
+      </staticmap>
+      <staticmap>
+        <mac>00:25:90:8a:67:e2</mac>
+        <ipaddr>10.0.2.7</ipaddr>
+        <hostname>emmy7</hostname>
+        <descr>2x K20m</descr>
+        <winsserver/>
+        <dnsserver/>
+        <ntpserver/>
+      </staticmap>
+      <staticmap>
+        <mac>00:25:90:8a:64:8c</mac>
+        <ipaddr>10.0.2.8</ipaddr>
+        <hostname>emmy8</hostname>
+        <descr>1x V100</descr>
+        <winsserver/>
+        <dnsserver/>
+        <ntpserver/>
+      </staticmap>
+      <staticmap>
+        <mac>00:25:90:8a:64:a4</mac>
+        <ipaddr>10.0.2.10</ipaddr>
+        <hostname>emmy10</hostname>
+        <descr>1x V100</descr>
+        <winsserver/>
+        <dnsserver/>
+        <ntpserver/>
+      </staticmap>
+      <staticmap>
+        <mac>00:25:90:89:eb:a2</mac>
+        <ipaddr>10.0.2.11</ipaddr>
+        <hostname>emmy11</hostname>
+        <descr>empty</descr>
+        <winsserver/>
+        <dnsserver/>
+        <ntpserver/>
+      </staticmap>
+      <staticmap>
+        <mac>00:25:90:8a:35:c9</mac>
+        <ipaddr>10.0.2.102</ipaddr>
+        <hostname>memmy2</hostname>
+        <winsserver/>
+        <dnsserver/>
+        <ntpserver/>
+      </staticmap>
+      <staticmap>
+        <mac>00:25:90:8a:0f:42</mac>
+        <ipaddr>10.0.2.107</ipaddr>
+        <hostname>memmy7</hostname>
+        <winsserver/>
+        <dnsserver/>
+        <ntpserver/>
+      </staticmap>
+      <staticmap>
+        <mac>00:25:90:8a:35:cb</mac>
+        <ipaddr>10.0.2.108</ipaddr>
+        <hostname>memmy8</hostname>
+        <winsserver/>
+        <dnsserver/>
+        <ntpserver/>
+      </staticmap>
+      <staticmap>
+        <mac>00:25:90:8a:34:53</mac>
+        <ipaddr>10.0.2.111</ipaddr>
+        <hostname>memmy11</hostname>
+        <winsserver/>
+        <dnsserver/>
+        <ntpserver/>
+      </staticmap>
     </lan>
   </dhcpd>
   <snmpd>
@@ -444,7 +564,33 @@
     </outbound>
   </nat>
   <filter>
-    <rule>
+    <rule uuid="57e58907-796b-48da-993c-a6f9c2262404">
+      <type>pass</type>
+      <interface>wan</interface>
+      <ipprotocol>inet</ipprotocol>
+      <statetype>keep state</statetype>
+      <direction>in</direction>
+      <quick>1</quick>
+      <protocol>tcp/udp</protocol>
+      <source>
+        <any>1</any>
+      </source>
+      <destination>
+        <network>wanip</network>
+        <port>22</port>
+      </destination>
+      <updated>
+        <username>root@10.0.3.3</username>
+        <time>1730206328.6711</time>
+        <description>/firewall_rules_edit.php made changes</description>
+      </updated>
+      <created>
+        <username>root@10.0.3.3</username>
+        <time>1730206328.6711</time>
+        <description>/firewall_rules_edit.php made changes</description>
+      </created>
+    </rule>
+    <rule uuid="8e26f841-17ac-4045-aa46-5674cf9ef364">
       <type>pass</type>
       <ipprotocol>inet</ipprotocol>
       <descr>Default allow LAN to any rule</descr>
@@ -456,7 +602,7 @@
         <any/>
       </destination>
     </rule>
-    <rule>
+    <rule uuid="b237c710-49d9-4df0-bdff-9d49914c5a8e">
       <type>pass</type>
       <ipprotocol>inet6</ipprotocol>
       <descr>Default allow LAN IPv6 to any rule</descr>
@@ -480,9 +626,9 @@
     <column_count>2</column_count>
   </widgets>
   <revision>
-    <username>root@fe80::cffe:46b5:3a3b:e736</username>
-    <time>1730129217.4976</time>
-    <description>user "root" changed</description>
+    <username>root@10.0.3.20</username>
+    <time>1731425398.3827</time>
+    <description>/services_dhcp.php made changes</description>
   </revision>
   <OPNsense>
     <DHCRelay version="1.0.1"/>
@@ -497,10 +643,51 @@
         <servers/>
       </server>
     </wireguard>
-    <IPsec version="1.0.1">
+    <IPsec version="1.0.3">
       <general>
         <enabled/>
+        <preferred_oldsa>0</preferred_oldsa>
+        <disablevpnrules>0</disablevpnrules>
+        <passthrough_networks/>
       </general>
+      <charon>
+        <max_ikev1_exchanges/>
+        <threads>16</threads>
+        <ikesa_table_size>32</ikesa_table_size>
+        <ikesa_table_segments>4</ikesa_table_segments>
+        <init_limit_half_open>1000</init_limit_half_open>
+        <ignore_acquire_ts>1</ignore_acquire_ts>
+        <make_before_break/>
+        <retransmit_tries/>
+        <retransmit_timeout/>
+        <retransmit_base/>
+        <retransmit_jitter/>
+        <retransmit_limit/>
+        <syslog>
+          <daemon>
+            <ike_name>1</ike_name>
+            <log_level>0</log_level>
+            <app>1</app>
+            <asn>1</asn>
+            <cfg>1</cfg>
+            <chd>1</chd>
+            <dmn>1</dmn>
+            <enc>1</enc>
+            <esp>1</esp>
+            <ike>1</ike>
+            <imc>1</imc>
+            <imv>1</imv>
+            <job>1</job>
+            <knl>1</knl>
+            <lib>1</lib>
+            <mgr>1</mgr>
+            <net>1</net>
+            <pts>1</pts>
+            <tls>1</tls>
+            <tnc>1</tnc>
+          </daemon>
+        </syslog>
+      </charon>
       <keyPairs/>
       <preSharedKeys/>
     </IPsec>
@@ -561,7 +748,7 @@
       <activeTimeout>1800</activeTimeout>
       <inactiveTimeout>15</inactiveTimeout>
     </Netflow>
-    <IDS version="1.0.9">
+    <IDS version="1.1.0">
       <rules/>
       <policies/>
       <userDefinedRules/>
@@ -587,6 +774,19 @@
         <syslog_eve>0</syslog_eve>
         <LogPayload>0</LogPayload>
         <verbosity/>
+        <eveLog>
+          <http>
+            <enable>0</enable>
+            <extended>0</extended>
+            <dumpAllHeaders/>
+          </http>
+          <tls>
+            <enable>0</enable>
+            <extended>0</extended>
+            <sessionResumption>0</sessionResumption>
+            <custom/>
+          </tls>
+        </eveLog>
       </general>
     </IDS>
     <Interfaces>
@@ -602,7 +802,7 @@
           <http_port>8000</http_port>
         </general>
       </ctrl_agent>
-      <dhcp4 version="1.0.0">
+      <dhcp4 version="1.0.1">
         <general>
           <enabled>0</enabled>
           <interfaces/>
@@ -612,6 +812,7 @@
         <ha>
           <enabled>0</enabled>
           <this_server_name/>
+          <max_unacked_clients>2</max_unacked_clients>
         </ha>
         <subnets/>
         <reservations/>
@@ -848,7 +1049,7 @@
         <port>53</port>
         <stats/>
         <active_interface/>
-        <dnssec>1</dnssec>
+        <dnssec>0</dnssec>
         <dns64>0</dns64>
         <dns64prefix/>
         <noarecords>0</noarecords>
@@ -917,19 +1118,33 @@
         <nxdomain/>
       </dnsbl>
       <forwarding>
-        <enabled>0</enabled>
+        <enabled>1</enabled>
       </forwarding>
       <dots/>
       <hosts/>
       <aliases/>
       <domains/>
     </unboundplus>
+    <trust>
+      <general version="1.0.1">
+        <store_intermediate_certs>0</store_intermediate_certs>
+        <install_crls>0</install_crls>
+        <fetch_crls>0</fetch_crls>
+        <enable_legacy_sect>1</enable_legacy_sect>
+        <enable_config_constraints>0</enable_config_constraints>
+        <CipherString/>
+        <Ciphersuites/>
+        <SignatureAlgorithms/>
+        <groups/>
+        <MinProtocol/>
+        <MinProtocol_DTLS/>
+      </general>
+    </trust>
   </OPNsense>
-  <hasync version="1.0.0">
+  <hasync version="1.0.1">
     <disablepreempt>0</disablepreempt>
     <disconnectppps>0</disconnectppps>
-    <pfsyncenabled>0</pfsyncenabled>
-    <pfsyncinterface>lan</pfsyncinterface>
+    <pfsyncinterface/>
     <pfsyncpeerip/>
     <pfsyncversion>1400</pfsyncversion>
     <synchronizetoip/>
