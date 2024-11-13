@@ -23,7 +23,7 @@
     - name: Create module folder
       when: inventory_hostname in groups['head']
       ansible.builtin.file:
-        path: "/work/modfiles/cmake"
+        path: "/work/modulefiles/cmake"
         state: directory
         mode: '0755'
 
@@ -52,6 +52,6 @@
       when: inventory_hostname in groups['head']
       ansible.builtin.template:
         src: "./templates/lmod/cmake-template.j2"
-        dest: "/work/modfiles/cmake/{{ item }}"
+        dest: "/work/modulefiles/cmake/{{ item }}"
         mode: "0755"
       loop: "{{ versions }}"
