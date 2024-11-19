@@ -6,7 +6,8 @@
       # - 13.3.0
       # - 12.4.0
       # - 11.5.0
-      - 10.5.0
+      # - 10.5.0
+      - 8.5.0
     makejobs: 20
 
   tasks:
@@ -33,7 +34,7 @@
         url: "https://ftp.fau.de/gnu/gcc/gcc-{{ item }}/gcc-{{ item }}.tar.gz"
         dest: "/tmp/gcc-{{ item }}.tar.gz"
         mode: "0755"
-      when: not gcc.stat.exists
+      # when: not gcc.stat.exists
       loop: "{{ versions }}"
 
     - name: Extract
@@ -42,28 +43,28 @@
         remote_src: true
         dest: "/tmp/"
         mode: "0755"
-      when: not gcc.stat.exists
+      # when: not gcc.stat.exists
       loop: "{{ versions }}"
 
     - name: Configure
       ansible.builtin.command:
         cmd: "./configure --prefix /apps/gcc/{{ item }} --disable-multilib"
         chdir: /tmp/gcc-{{ item }}
-      when: not gcc.stat.exists
+      # when: not gcc.stat.exists
       loop: "{{ versions }}"
 
     - name: Build
       ansible.builtin.command:
         cmd: make -j {{ makejobs }}
         chdir: /tmp/gcc-{{ item }}
-      when: not gcc.stat.exists
+      # when: not gcc.stat.exists
       loop: "{{ versions }}"
 
     - name: Install
       ansible.builtin.command:
         cmd: make install-strip
         chdir: /tmp/gcc-{{ item }}
-      when: not gcc.stat.exists
+      # when: not gcc.stat.exists
       loop: "{{ versions }}"
 
     - name: Clean up archive

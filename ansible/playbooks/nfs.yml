@@ -10,15 +10,40 @@
           - nfs-utils
         state: present
 
+    # cursed: disk has no partition table
     - name: Format the home disk with XFS filesystem
       community.general.filesystem:
         fstype: xfs
         dev: /dev/disk/by-path/pci-0000:62:00.0-nvme-1
 
-    - name: Format the work disk with XFS filesystem
+    - name: Create 8TB work partition
+      community.general.parted:
+        device: /dev/disk/by-path/pci-0000:e1:00.0-nvme-1
+        number: 1
+        label: gpt
+        state: present
+        part_end: 8TB
+        unit: TB
+
+    - name: Create 8TB apps partition
+      community.general.parted:
+        device: /dev/disk/by-path/pci-0000:e1:00.0-nvme-1
+        number: 2
+        label: gpt
+        state: present
+        part_start: 8TB
+        part_end: "100%"
+        unit: TB
+
+    - name: Format the work part with XFS filesystem
       community.general.filesystem:
         fstype: xfs
-        dev: /dev/disk/by-path/pci-0000:e1:00.0-nvme-1
+        dev: /dev/disk/by-path/pci-0000:e1:00.0-nvme-1-part1
+
+    - name: Format the app part with XFS filesystem
+      community.general.filesystem:
+        fstype: xfs
+        dev: /dev/disk/by-path/pci-0000:e1:00.0-nvme-1-part2
 
     - name: Create mount point /home if it does not exist
       ansible.builtin.file:
@@ -42,7 +67,15 @@
     - name: Mount the disk to /work
       ansible.posix.mount:
         path: /work
-        src: /dev/disk/by-path/pci-0000:e1:00.0-nvme-1
+        src: /dev/disk/by-path/pci-0000:e1:00.0-nvme-1-part1
+        fstype: xfs
+        opts: defaults
+        state: mounted
+
+    - name: Mount the disk to /apps
+      ansible.posix.mount:
+        path: /apps
+        src: /dev/disk/by-path/pci-0000:e1:00.0-nvme-1-part2
         fstype: xfs
         opts: defaults
         state: mounted
@@ -58,9 +91,17 @@
     - name: Add mount entry to fstab
       ansible.posix.mount:
         path: /work
-        src: /dev/disk/by-path/pci-0000:e1:00.0-nvme-1
+        src: /dev/disk/by-path/pci-0000:e1:00.0-nvme-1-part1
         fstype: xfs
-        opts: noacl
+        opts: defaults
+        state: present
+
+    - name: Add mount entry to fstab
+      ansible.posix.mount:
+        path: /apps
+        src: /dev/disk/by-path/pci-0000:e1:00.0-nvme-1-part2
+        fstype: xfs
+        opts: defaults
         state: present
 
     - name: Configure NFS export for /home
@@ -74,6 +115,13 @@
       ansible.builtin.lineinfile:
         path: /etc/exports
         line: "/work  *(rw,sync,no_root_squash)"
+        create: true
+        mode: '0777'
+
+    - name: Configure NFS export for /apps
+      ansible.builtin.lineinfile:
+        path: /etc/exports
+        line: "/apps  *(rw,sync,no_root_squash)"
         create: true
         mode: '0777'
 
@@ -128,6 +176,12 @@
         state: directory
         mode: '0777'
 
+    - name: Create mount point /apps if it does not exist
+      ansible.builtin.file:
+        path: /apps
+        state: directory
+        mode: '0777'
+
     - name: Mount NFS share from head to /home
       ansible.posix.mount:
         path: /home
@@ -144,6 +198,14 @@
         opts: noacl
         state: mounted
 
+    - name: Mount NFS share from head to /apps
+      ansible.posix.mount:
+        path: /apps
+        src: "{{ groups['head'][0] }}:/apps"
+        fstype: nfs
+        opts: noacl
+        state: mounted
+
     - name: Add home NFS mount entry to fstab
       ansible.posix.mount:
         path: /home
@@ -156,6 +218,14 @@
       ansible.posix.mount:
         path: /work
         src: "{{ groups['head'][0] }}:/work"
+        fstype: nfs
+        opts: noacl
+        state: present
+
+    - name: Add apps NFS mount entry to fstab
+      ansible.posix.mount:
+        path: /apps
+        src: "{{ groups['head'][0] }}:/apps"
         fstype: nfs
         opts: noacl
         state: present

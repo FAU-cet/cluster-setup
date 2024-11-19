@@ -1,15 +1,10 @@
-- name: Install repos and CUDA
+- name: Install repos
   hosts: all
 
   tasks:
     - name: Add cuda repo
       ansible.builtin.command:
         cmd: dnf config-manager --add-repo http://developer.download.nvidia.com/compute/cuda/repos/rhel9/x86_64/cuda-rhel9.repo
-    
-    - name: Install cuda
-      ansible.builtin.dnf:
-        name: cuda
-        state: present
 
 
 - name: Install Nvidia GPU driver
@@ -37,4 +32,14 @@
         name:
           - "nvidia-driver"
           - "nvidia-settings"
+          - cuda
         state: latest
+
+- name: Install CUDA
+  hosts: all
+    - name: Install cuda
+      ansible.builtin.dnf:
+        name:
+          - cuda-toolkit
+          - nvhpc
+        state: present
